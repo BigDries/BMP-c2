@@ -1,0 +1,25 @@
+programma encoder
+	input 2 files (txt en BMP) 
+		txt = <secret message> + *
+		BMP = Foto BMP
+	output 1 file (BMP)
+		BMP = foto LSB van pixels = secret message + *
+
+	inputPixels[0]+3x ==> BL
+	inputPixels[1]+3x ==> GR	==> omgekeerde volgorde
+	inputPixels[2]+3x ==> RO	
+
+	
+
+
+programma decoder
+	input BMP
+	output => printf(message)
+	
+	for(i=0; i < array lengte; i++)
+	{	if(array%2)
+		{bit = 0}
+		else
+		{bit = 1}
+	}
+ 
