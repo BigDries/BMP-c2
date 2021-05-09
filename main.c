@@ -50,9 +50,17 @@ int main()
     unsigned char* inputPixels = (unsigned char *) calloc(imageSize, sizeof(unsigned char)); // allocate een array voor alle pixels
 	unsigned char mask = 0b11111110;
 	
-	
     fread(inputPixels, sizeof(unsigned char), imageSize, inputFilePointer); // Lees alle pixels (de rest van de file
 	fclose(inputFilePointer);
+
+
+	int messagesize = imageSize/8;
+	unsigned char* message = (unsigned char *) calloc(imageSize, sizeof(unsigned char));
+	
+	fread(message, sizeof(unsigned char), messagesize, SecretFilePointer);
+	fclose(SecretFilePointer);
+	
+	
 	for(int i =0; i < imageSize-2; i+=3)
 	{
 		//printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixelwaardes (hexadecimalen)
@@ -64,9 +72,13 @@ int main()
 		printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixels met LSB 0 (hexadecimalen)
 	}
     
-	
+	for(int i =0; i < messagesize; i++)
+	{
+		printf("%x \n", message[i]); //neerschrijven van pixelwaardes (hexadecimalen)
+	}
 	
     free(inputPixels);
+	free(message);
     
     return 0;
 }
