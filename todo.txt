@@ -17,9 +17,7 @@ programma decoder
 	output => printf(message)
 	
 	for(i=0; i < array lengte; i++)
-	{	if(array%2)
-		{bit = 0}
-		else
-		{bit = 1}
+	{	
+		pixel = pixel & mask;
 	}
  

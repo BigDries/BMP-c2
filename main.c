@@ -39,25 +39,33 @@ int main()
     int breedte = *(int*)&bmpHeader[18];
     int hoogte = *(int*)&bmpHeader[22];
 
-    #ifdef __DEBUG
+    
+	#ifdef __DEBUG
         printf("DEBUG info: breedte = %d\n", breedte);
         printf("DEBUG info: hoogte = %d\n", hoogte);
     #endif
 	
-	
-	
-    int imageSize = 3 * breedte * hoogte; //ieder pixel heeft 3 byte data: rood, groen en blauw (RGB)
+    
+	int imageSize = 3 * breedte * hoogte; //ieder pixel heeft 3 byte data: rood, groen en blauw (RGB)
     unsigned char* inputPixels = (unsigned char *) calloc(imageSize, sizeof(unsigned char)); // allocate een array voor alle pixels
-	
+	unsigned char mask = 0b11111110;
 	
 	
     fread(inputPixels, sizeof(unsigned char), imageSize, inputFilePointer); // Lees alle pixels (de rest van de file
 	fclose(inputFilePointer);
 	for(int i =0; i < imageSize-2; i+=3)
 	{
-		printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]);
+		//printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixelwaardes (hexadecimalen)
+		
+		inputPixels[i] = inputPixels[i]&mask; //LSB =0
+		inputPixels[i+1] = inputPixels[i+1]&mask; //LSB =0
+		inputPixels[i+2] = inputPixels[i+2]&mask; //LSB =0
+		
+		printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixels met LSB 0 (hexadecimalen)
 	}
-   
+    
+	
+	
     free(inputPixels);
     
     return 0;
