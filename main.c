@@ -6,6 +6,8 @@
 #define BMPINPUTFILE "test.bmp"
 #define SecretInputFile "Secret.txt"
 
+void MessageToBit(unsigned char* message, int size, unsigned char* Bin);
+
 int main()
 {
     #ifdef __DEBUG
@@ -49,6 +51,7 @@ int main()
 	int imageSize = 3 * breedte * hoogte; //ieder pixel heeft 3 byte data: rood, groen en blauw (RGB)
     unsigned char* inputPixels = (unsigned char *) calloc(imageSize, sizeof(unsigned char)); // allocate een array voor alle pixels
 	unsigned char mask = 0b11111110;
+	unsigned char* BinMessage = (unsigned char *) calloc(imageSize, sizeof(unsigned char));
 	
     fread(inputPixels, sizeof(unsigned char), imageSize, inputFilePointer); // Lees alle pixels (de rest van de file
 	fclose(inputFilePointer);
@@ -65,7 +68,7 @@ int main()
 	{
 		//printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixelwaardes (hexadecimalen)
 		
-		inputPixels[i] = inputPixels[i]&mask; //LSB =0
+		inputPixels[i] = inputPixels[i]&mask;     //LSB =0
 		inputPixels[i+1] = inputPixels[i+1]&mask; //LSB =0
 		inputPixels[i+2] = inputPixels[i+2]&mask; //LSB =0
 		
@@ -74,11 +77,40 @@ int main()
     
 	for(int i =0; i < messagesize; i++)
 	{
-		printf("%x \n", message[i]); //neerschrijven van pixelwaardes (hexadecimalen)
+		printf("%c \n", message[i]); //neerschrijven van message (hexadecimalen)
+	}
+	MessageToBit(message, messagesize, BinMessage);
+    for(int i =0; i < imageSize; i++)
+	{
+		printf("%d ", BinMessage[i]); //neerschrijven van message (hexadecimalen)
+	}
+	for(int i = 0; i <messagesize; i++)
+	{
+	inputPixels[i]=inputPixels[i]+BinMessage[i];
+		
+	}
+	for(int i =0; i < imageSize-2; i+=3)
+	{
+		printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixels met LSB 0 (hexadecimalen)
 	}
 	
-    free(inputPixels);
+	free(inputPixels);
 	free(message);
     
     return 0;
+}
+
+
+void MessageToBit(unsigned char* message, int size, unsigned char* Bin)
+{
+	//random tekst ==> 01010010 01000001 01001110 01000100 01001111 01001101 00100000 01010100 01000101 01001011 01010011 01010100
+	
+	for(int f=0; f<size;f++)
+	{
+		for(int i=0; i<8;i++)
+		{
+			char mask = 0b00000001;
+			Bin[((f*8)+i)] = (message[f]>>i)&mask; //pos =1?
+		}
+	}
 }
