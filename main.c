@@ -4,6 +4,7 @@
 #define __DEBUG
 
 #define BMPINPUTFILE "test.bmp"
+#define OUTINPUTFILE "broek.bmp"
 #define SecretInputFile "Secret.txt"
 
 void MessageToBit(unsigned char* message, int size, unsigned char* Bin);
@@ -16,11 +17,18 @@ int main()
 
 	
     FILE* inputFilePointer = fopen(BMPINPUTFILE, "rb"); //maak een file pointer naar de afbeelding
-    FILE* SecretFilePointer = fopen(SecretInputFile, "r");
+    FILE* SecretFilePointer = fopen(SecretInputFile, "r"); //maak een file pointer naar de afbeelding
+    FILE* outputFilePointer = fopen(OUTINPUTFILE, "rb");
+
 	
 	if(inputFilePointer == NULL) //Test of het open van de file gelukt is!
     {
         printf("Something went wrong while trying to open %s\n", BMPINPUTFILE);
+        exit(EXIT_FAILURE);
+    }
+	else if(outputFilePointer == NULL) //Test of het open van de file gelukt is!
+    {
+        printf("Something went wrong while trying to open %s\n", OUTINPUTFILE);
         exit(EXIT_FAILURE);
     }
 	else if(SecretFilePointer == NULL) //Test of het open van de file gelukt is!
@@ -94,10 +102,11 @@ int main()
 	{
 		printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixels met LSB 0 (hexadecimalen)
 	}
-	
+	fwrite(inputPixels, sizeof(unsigned char), imageSize, outputFilePointer);
+	fwrite(bmpHeader, sizeof(unsigned char), 54, outputFilePointer);
 	free(inputPixels);
 	free(message);
-    
+
     return 0;
 }
 
