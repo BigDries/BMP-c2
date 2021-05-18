@@ -34,7 +34,7 @@ int main()
     #endif
 
     unsigned char bmpHeader[54]; // voorzie een array van 54-bytes voor de BMP Header
-    fread(bmpHeader, sizeof(unsigned char), 54, inputFilePointer); // lees de 54-byte header
+    fread(bmpHeader, sizeof(unsigned char), 54, inputFilePointer); // lees de 54-gf header
 
     //Informatie uit de header (wikipedia)
     // haal de hoogte en breedte uit de header
@@ -58,6 +58,7 @@ int main()
 
 
 	int messagesize = imageSize/8;
+	
 	unsigned char* message = (unsigned char *) calloc(imageSize, sizeof(unsigned char));
 	
 	fread(message, sizeof(unsigned char), messagesize, SecretFilePointer);
