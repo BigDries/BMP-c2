@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define __DEBUG
 
@@ -7,7 +8,7 @@
 #define OUTINPUTFILE "broek.bmp"
 #define SecretInputFile "Secret.txt"
 
-void MessageToBit(unsigned char* message, int size, unsigned char* Bin);
+void MessageToBit( char* message, int size, unsigned char* Bin);
 
 int main()
 {
@@ -38,7 +39,7 @@ int main()
     }
 
     #ifdef __DEBUG
-        printf("DEBUG info: Opening Files OK: %s %s\n", BMPINPUTFILE, SecretInputFile);
+        printf("DEBUG info: Opening Files OK: %s %s %s\n", BMPINPUTFILE, OUTINPUTFILE, SecretInputFile);
     #endif
 
     unsigned char bmpHeader[54]; // voorzie een array van 54-bytes voor de BMP Header
@@ -58,22 +59,27 @@ int main()
     
 	int imageSize = 3 * breedte * hoogte; //ieder pixel heeft 3 byte data: rood, groen en blauw (RGB)
     unsigned char* inputPixels = (unsigned char *) calloc(imageSize, sizeof(unsigned char)); // allocate een array voor alle pixels
-	unsigned char mask = 0b11111110;
+	unsigned char mask = 0b11111110; //mask om bits op 0 te zetten
 	unsigned char* BinMessage = (unsigned char *) calloc(imageSize, sizeof(unsigned char));
 	
     fread(inputPixels, sizeof(unsigned char), imageSize, inputFilePointer); // Lees alle pixels (de rest van de file
 	fclose(inputFilePointer);
 
 
-	int messagesize = imageSize/8;
+	int messagesize = imageSize/8; //max messagesize
 	
-	unsigned char* message = (unsigned char *) calloc(imageSize, sizeof(unsigned char));
+	 char* message = ( char *) calloc(imageSize, sizeof( char));
 	
-	fread(message, sizeof(unsigned char), messagesize, SecretFilePointer);
+	if(!feof (SecretFilePointer))
+	{
+		fread(message, sizeof(unsigned char), messagesize, SecretFilePointer);
+	}
+	
 	fclose(SecretFilePointer);
+	messagesize=strlen(message); //messagesize inkorten tot juiste lengte
 	
 	
-	for(int i =0; i < imageSize-2; i+=3)
+	for(int i =0; i < (messagesize*8); i+=3)
 	{
 		//printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixelwaardes (hexadecimalen)
 		
@@ -86,14 +92,14 @@ int main()
     
 	for(int i =0; i < messagesize; i++)
 	{
-		printf("%c \n", message[i]); //neerschrijven van message (hexadecimalen)
+		printf("%c", message[i]); //neerschrijven van message (hexadecimalen)
 	}
 	MessageToBit(message, messagesize, BinMessage);
-    for(int i =0; i < imageSize; i++)
+    for(int i =0; i < (messagesize*8); i++)
 	{
 		printf("%d ", BinMessage[i]); //neerschrijven van message (hexadecimalen)
 	}
-	for(int i = 0; i <messagesize; i++)
+	for(int i = 0; i <(messagesize*8); i++)
 	{
 	inputPixels[i]=inputPixels[i]+BinMessage[i];
 		
@@ -102,6 +108,7 @@ int main()
 	{
 		printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixels met LSB 0 (hexadecimalen)
 	}
+	
 	fwrite(inputPixels, sizeof(unsigned char), imageSize, outputFilePointer);
 	fwrite(bmpHeader, sizeof(unsigned char), 54, outputFilePointer);
 	free(inputPixels);
@@ -111,7 +118,7 @@ int main()
 }
 
 
-void MessageToBit(unsigned char* message, int size, unsigned char* Bin)
+void MessageToBit( char* message, int size, unsigned char* Bin)
 {
 	//random tekst ==> 01010010 01000001 01001110 01000100 01001111 01001101 00100000 01010100 01000101 01001011 01010011 01010100
 	
