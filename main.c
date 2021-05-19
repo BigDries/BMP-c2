@@ -79,7 +79,7 @@ int main()
 	messagesize=strlen(message); //messagesize inkorten tot juiste lengte
 	
 	
-	for(int i =0; i < (messagesize*8); i+=3)
+	for(int i =0; i < imagesize; i+=3)
 	{
 		//printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixelwaardes (hexadecimalen)
 		
@@ -98,12 +98,9 @@ int main()
     for(int i =0; i < (messagesize*8); i++)
 	{
 		printf("%d ", BinMessage[i]); //neerschrijven van message (hexadecimalen)
+		inputPixels[i]=inputPixels[i]+BinMessage[i];
 	}
-	for(int i = 0; i <(messagesize*8); i++)
-	{
-	inputPixels[i]=inputPixels[i]+BinMessage[i];
-		
-	}
+	
 	for(int i =0; i < imageSize-2; i+=3)
 	{
 		printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixels met LSB 0 (hexadecimalen)
