@@ -79,7 +79,7 @@ int main()
 	messagesize=strlen(message); //messagesize inkorten tot juiste lengte
 	
 	
-	for(int i =0; i < imagesize; i+=3)
+	for(int i =0; i < (messagesize*8); i+=3)
 	{
 		//printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixelwaardes (hexadecimalen)
 		
