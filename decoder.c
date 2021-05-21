@@ -26,38 +26,50 @@ int main()
 	
 	int imageSize = 3 * breedte * hoogte;
 	unsigned char* outputPixels = (unsigned char *) calloc(imageSize, sizeof(unsigned char));
-
+	
+	
 	unsigned char* BinMessage = (unsigned char *) calloc(imageSize, sizeof(unsigned char));
 	
 	//printf("Stap 2");
 	
 	fread(outputPixels, sizeof(unsigned char), imageSize, inputFilePointer);
 	
+	for(int i=0; i<imageSize; i++)
+	{
+		printf("%d \n", outputPixels[i]);
+	}
 	//printf("Stap 3");
 	
 	BitsToMessage(BinMessage, outputPixels, imageSize);
 	
+	for(int i=0; i<imageSize; i++)
+	{
+		printf("%d", BinMessage[i]);
+	}
+	
 	//printf("Stap 4");
 	
-	printf("%c",BinMessage[3]);
-	
-	char c= '0';
+	char ch = '0';
+	int f=0;
 	do
 	{
-		for(int f=0; f>(imageSize/8);f++)
+			ch = '0';
 		{
-			c= '0';
-			for(int i=0; i>8; i++)
+			for(int i=0; i<8;i++)
 			{
-				c = BinMessage[(8*f)+i];
-				c = c>>1;
+				char mask = 0b00000000;
+				ch = BinMessage[[f]>>i)|mask; 
 			}
-			putchar(c);
 		}
+			putchar(ch);
+			printf("\n%c \n", ch);
+			printf("%d \n", ch);
+			printf("Stap 4");
+			
+			f++;
 	}
-	while(c!='*');
+	while(ch!='*' || f<100);
 	
-	printf("Stap 4");
 
 
 	return 0;
@@ -65,8 +77,8 @@ int main()
 
 void BitsToMessage(unsigned char* BinMessage, unsigned char* OUTPUTPIXELS, int size)
 {
-	for(int i=0;i>size;i++)
+	for(int i=0;i<size;i++)
 	{
-		BinMessage[i]=OUTPUTPIXELS[i]%2;
+		BinMessage[i]=(OUTPUTPIXELS[i]%2);
 	}
 }

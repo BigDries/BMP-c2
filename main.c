@@ -19,7 +19,7 @@ int main()
 	
     FILE* inputFilePointer = fopen(BMPINPUTFILE, "rb"); //maak een file pointer naar de afbeelding
     FILE* SecretFilePointer = fopen(SecretInputFile, "r"); //maak een file pointer naar de afbeelding
-    FILE* outputFilePointer = fopen(OUTINPUTFILE, "rb");
+    FILE* outputFilePointer = fopen(OUTINPUTFILE, "wb");
 
 	
 	if(inputFilePointer == NULL) //Test of het open van de file gelukt is!
@@ -90,7 +90,7 @@ int main()
 		inputPixels[i+1] = inputPixels[i+1]&mask; //LSB =0
 		inputPixels[i+2] = inputPixels[i+2]&mask; //LSB =0
 		
-		printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixels met LSB 0 (hexadecimalen)
+		//printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixels met LSB 0 (hexadecimalen)
 	}
     
 	for(int i =0; i < messagesize; i++)
@@ -100,14 +100,14 @@ int main()
 	MessageToBit(message, messagesize, BinMessage);
     for(int i =0; i < (messagesize*8); i++)
 	{
-		printf("%d ", BinMessage[i]); //neerschrijven van message (hexadecimalen)
+		//printf("%d ", BinMessage[i]); //neerschrijven van message (hexadecimalen)
 		inputPixels[i]=inputPixels[i]+BinMessage[i];
 	}
 	
-	for(int i =0; i < imageSize-2; i+=3)
+	/*for(int i =0; i < imageSize-2; i+=3)
 	{
 		printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixels met LSB 0 (hexadecimalen)
-	}
+	}*/
 	
 	fwrite(bmpHeader, sizeof(unsigned char), 54, outputFilePointer);
 	fwrite(inputPixels, sizeof(unsigned char), imageSize, outputFilePointer);
@@ -120,8 +120,6 @@ int main()
 
 void MessageToBit( char* message, int size, unsigned char* Bin)
 {
-	//random tekst ==> 01010010 01000001 01001110 01000100 01001111 01001101 00100000 01010100 01000101 01001011 01010011 01010100
-	
 	for(int f=0; f<size;f++)
 	{
 		for(int i=0; i<8;i++)
