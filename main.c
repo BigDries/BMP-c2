@@ -27,9 +27,11 @@ int main()
         printf("Something went wrong while trying to open %s\n", BMPINPUTFILE);
         exit(EXIT_FAILURE);
     }
+	
 	else if(outputFilePointer == NULL) //Test of het open van de file gelukt is!
     {
         printf("Something went wrong while trying to open %s\n", OUTINPUTFILE);
+		system("pause");
         exit(EXIT_FAILURE);
     }
 	else if(SecretFilePointer == NULL) //Test of het open van de file gelukt is!
@@ -76,6 +78,7 @@ int main()
 	}
 	
 	fclose(SecretFilePointer);
+	
 	messagesize=strlen(message); //messagesize inkorten tot juiste lengte
 	
 	
@@ -106,8 +109,8 @@ int main()
 		printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixels met LSB 0 (hexadecimalen)
 	}
 	
-	fwrite(inputPixels, sizeof(unsigned char), imageSize, outputFilePointer);
 	fwrite(bmpHeader, sizeof(unsigned char), 54, outputFilePointer);
+	fwrite(inputPixels, sizeof(unsigned char), imageSize, outputFilePointer);
 	free(inputPixels);
 	free(message);
 
