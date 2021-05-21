@@ -19,7 +19,7 @@ int main()
 	
     FILE* inputFilePointer = fopen(BMPINPUTFILE, "rb"); //maak een file pointer naar de afbeelding
     FILE* SecretFilePointer = fopen(SecretInputFile, "r"); //maak een file pointer naar de afbeelding
-    FILE* outputFilePointer = fopen(OUTINPUTFILE, "rb");
+    FILE* outputFilePointer = fopen(OUTINPUTFILE, "wb");
 
 	
 	if(inputFilePointer == NULL) //Test of het open van de file gelukt is!
