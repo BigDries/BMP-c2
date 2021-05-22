@@ -50,22 +50,22 @@ int main()
 	//printf("Stap 4");
 	//gcc -Wall -pedantic decoder.c -o dec
 	
-	//fout bij N O M X 
-	char letter = '0';
+	//fout bij N O M X Y
+	char letter = 0;
 	int f=0;
 	printf("\n");
 	while(letter!='*' && f!=51)
 	{
-		letter ='0'; 
-		for(int i=8; i>=0; i--)
+		letter =0; 
+		for(int i=0; i<8; i++)
 		{
+			letter = letter <<1;
 			//printf("%d\t", BinMessage[(f*8)+i]);
-			letter += letter | BinMessage[(f*8)+i]; 
-			letter >>1;
+			letter = letter | BinMessage[(f*8)+i]; 
 		}
 		f++;
 		//printf("\n%c \n", letter);
-		//printf("%d \n", (f*8));
+		//printf("%d \n", f);
 		//system("pause");
 		putchar(letter);
 	}

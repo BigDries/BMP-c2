@@ -125,7 +125,7 @@ void MessageToBit( char* message, int size, unsigned char* Bin)
 		for(int i=0; i<8;i++)
 		{
 			char mask = 0b00000001;
-			Bin[((f*8)+i)] = (message[f]>>i)&mask; //pos =1?
+			Bin[((f*8)+i)] = (message[f]>>(7-i))&mask; //pos =1?
 		}
 	}
 }
