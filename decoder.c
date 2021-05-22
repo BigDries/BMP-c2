@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define Image "broek.bmp"
+#define Image "out.bmp"
 
 void BitsToMessage(unsigned char* BinMessage, unsigned char* OUTPUTPIXELS, int size);
 
@@ -48,27 +48,27 @@ int main()
 	}
 	
 	//printf("Stap 4");
+	//gcc -Wall -pedantic decoder.c -o dec
 	
-	char ch = '0';
+	//fout bij N O M X 
+	char letter = '0';
 	int f=0;
-	do
+	printf("\n");
+	while(letter!='*' && f!=51)
 	{
-			ch = '0';
+		letter ='0'; 
+		for(int i=8; i>=0; i--)
 		{
-			for(int i=0; i<8;i++)
-			{
-				char mask = 0b00000000;
-				ch = BinMessage[[f]>>i)|mask; 
-			}
+			//printf("%d\t", BinMessage[(f*8)+i]);
+			letter += letter | BinMessage[(f*8)+i]; 
+			letter >>1;
 		}
-			putchar(ch);
-			printf("\n%c \n", ch);
-			printf("%d \n", ch);
-			printf("Stap 4");
-			
-			f++;
+		f++;
+		//printf("\n%c \n", letter);
+		//printf("%d \n", (f*8));
+		//system("pause");
+		putchar(letter);
 	}
-	while(ch!='*' || f<100);
 	
 
 

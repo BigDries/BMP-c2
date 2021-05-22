@@ -5,7 +5,7 @@
 #define __DEBUG
 
 #define BMPINPUTFILE "test.bmp"
-#define OUTINPUTFILE "broek.bmp"
+#define OUTINPUTFILE "out.bmp"
 #define SecretInputFile "Secret.txt"
 
 void MessageToBit( char* message, int size, unsigned char* Bin);
