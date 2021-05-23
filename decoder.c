@@ -42,7 +42,7 @@ int main()
 	char letter = 0;
 	int f=0;
 	printf("\n");
-	while(letter!='*' && f!=51)
+	while(letter!='*')
 	{
 		letter =0; 
 		for(int i=0; i<8; i++)

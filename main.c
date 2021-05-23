@@ -1,3 +1,4 @@
+//gcc -Wall -pedantic main.c -o dec
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
