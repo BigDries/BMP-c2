@@ -5,6 +5,7 @@
 
 //#define __DEBUG //haal uit comments voor debugging
 
+
 #define Image "out.bmp"
 
 
@@ -21,7 +22,7 @@ int main()
     }
 	
 	#ifdef __DEBUG
-        printf("DEBUG info: Opening Files OK: %s %s %s\n", BMPINPUTFILE, OUTINPUTFILE, SecretInputFile);
+        printf("DEBUG info: Opening Files OK: %s \n", Image);
     #endif
 	
 	unsigned char bmpHeader[54]; // voorzie een array van 54-bytes voor de BMP Header
@@ -41,18 +42,15 @@ int main()
 	
 	char letter = 0;
 	int f=0;
-	printf("\n");
 	while(letter!='*')
 	{
 		letter =0; 
 		for(int i=0; i<8; i++)
 		{
 			letter = letter <<1;
-			
 			letter = letter | BinMessage[(f*8)+i]; 
 		}
 		f++;
-
 		putchar(letter);
 	}
 	
