@@ -11,8 +11,22 @@
 
 void MessageToBit( char* message, int size, unsigned char* Bin);
 
-int main()
+int main(int argc, char* argv[])
 {
+    for(int i = 0; i < argc; i++)
+    {
+        printf("%s\n", argv[i]);
+    }
+    if(argc > 1 && strcmp(argv[i], "-s") == 0)
+    {
+        char * secret.txt = argv[i + 1]; 
+    }
+    else if(argc > 1 && strcmp(argv[i], "-i") == 0)
+    {
+        char * test.bmp = argv[i+1];
+    }
+
+	
     #ifdef __DEBUG
         printf("DEBUG info: BMP transformer\n");
     #endif

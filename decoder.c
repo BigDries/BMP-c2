@@ -11,8 +11,20 @@
 
 void BitsToMessage(unsigned char* BinMessage, unsigned char* OUTPUTPIXELS, int size);
 
-int main()
+int main(int argc, char* argv[])
 {
+    for(int i = 0; i < argc; i++)
+    {
+        printf("%s\n", argv[i]);
+    }
+    if(argc > 1 && strcmp(argv[i], "-s") == 0)
+    {
+        char * secret.txt = argv[i + 1]; 
+    }
+    else if(argc > 1 && strcmp(argv[i], "-i") == 0)
+    {
+        char * test.bmp = argv[i+1];
+    }
 	FILE* inputFilePointer = fopen(Image, "rb");
 	
 	if(inputFilePointer == NULL) //Test of het open van de file gelukt is!
@@ -54,8 +66,6 @@ int main()
 		putchar(letter);
 	}
 	
-
-
 	return 0;
 }
 
