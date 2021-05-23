@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define __DEBUG
+//#define __DEBUG //haal uit comments voor debugging
 
 #define BMPINPUTFILE "test.bmp"
 #define OUTINPUTFILE "out.bmp"
@@ -21,7 +21,6 @@ int main()
     FILE* SecretFilePointer = fopen(SecretInputFile, "r"); //maak een file pointer naar de afbeelding
     FILE* outputFilePointer = fopen(OUTINPUTFILE, "wb");
 
-	
 	if(inputFilePointer == NULL) //Test of het open van de file gelukt is!
     {
         printf("Something went wrong while trying to open %s\n", BMPINPUTFILE);
@@ -34,6 +33,7 @@ int main()
 		system("pause");
         exit(EXIT_FAILURE);
     }
+	
 	else if(SecretFilePointer == NULL) //Test of het open van de file gelukt is!
     {
         printf("Something went wrong while trying to open %s\n", SecretInputFile);
@@ -51,18 +51,18 @@ int main()
     // haal de hoogte en breedte uit de header
     int breedte = *(int*)&bmpHeader[18];
     int hoogte = *(int*)&bmpHeader[22];
-
     
 	#ifdef __DEBUG
         printf("DEBUG info: breedte = %d\n", breedte);
         printf("DEBUG info: hoogte = %d\n", hoogte);
     #endif
-	
     
 	int imageSize = 3 * breedte * hoogte; //ieder pixel heeft 3 byte data: rood, groen en blauw (RGB)
-    unsigned char* inputPixels = (unsigned char *) calloc(imageSize, sizeof(unsigned char)); // allocate een array voor alle pixels
-	unsigned char mask = 0b11111110; //mask om bits op 0 te zetten
+    
+	unsigned char* inputPixels = (unsigned char *) calloc(imageSize, sizeof(unsigned char)); // allocate een array voor alle pixels
 	unsigned char* BinMessage = (unsigned char *) calloc(imageSize, sizeof(unsigned char));
+	
+	unsigned char mask = 0b11111110; //mask om bits op 0 te zetten
 	
     fread(inputPixels, sizeof(unsigned char), imageSize, inputFilePointer); // Lees alle pixels (de rest van de file
 	fclose(inputFilePointer);
@@ -70,7 +70,7 @@ int main()
 
 	int messagesize = imageSize/8; //max messagesize
 	
-	 char* message = ( char *) calloc(imageSize, sizeof( char));
+	char* message = ( char *) calloc(imageSize, sizeof( char));
 	
 	if(!feof (SecretFilePointer))
 	{
@@ -81,33 +81,24 @@ int main()
 	
 	messagesize=strlen(message); //messagesize inkorten tot juiste lengte
 	
-	
 	for(int i =0; i < (messagesize*8); i+=3)
 	{
-		//printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixelwaardes (hexadecimalen)
-		
 		inputPixels[i] = inputPixels[i]&mask;     //LSB =0
 		inputPixels[i+1] = inputPixels[i+1]&mask; //LSB =0
 		inputPixels[i+2] = inputPixels[i+2]&mask; //LSB =0
-		
-		//printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixels met LSB 0 (hexadecimalen)
 	}
     
 	for(int i =0; i < messagesize; i++)
 	{
 		printf("%c", message[i]); //neerschrijven van message (hexadecimalen)
 	}
+	
 	MessageToBit(message, messagesize, BinMessage);
+	
     for(int i =0; i < (messagesize*8); i++)
 	{
-		//printf("%d ", BinMessage[i]); //neerschrijven van message (hexadecimalen)
 		inputPixels[i]=inputPixels[i]+BinMessage[i];
 	}
-	
-	/*for(int i =0; i < imageSize-2; i+=3)
-	{
-		printf("pixel %d: B= %x, G=%x, R=%x\n", i, inputPixels[i], inputPixels[i+1], inputPixels[i+2]); //neerschrijven van pixels met LSB 0 (hexadecimalen)
-	}*/
 	
 	fwrite(bmpHeader, sizeof(unsigned char), 54, outputFilePointer);
 	fwrite(inputPixels, sizeof(unsigned char), imageSize, outputFilePointer);
